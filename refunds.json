@@ -1,0 +1,766 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Saturn AfterShip Connector Service",
+        "version": "2018-05-10"
+    },
+    "paths": {
+        "/refund/create": {
+            "options": {
+                "description": "Handles CORS-preflight requests",
+                "operationId": "CorsRefundCreate",
+                "responses": {
+                    "200": {
+                        "description": "Canned response for CORS-preflight requests",
+                        "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Max-Age": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "tags": [
+                    "CORS"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "contentHandling": "CONVERT_TO_TEXT",
+                    "passThroughBehavior": "when_no_match",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\":200}"
+                    },
+                    "responses": {
+                        "default": {
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Max-Age": "'600'",
+                                "method.response.header.Access-Control-Allow-Headers": "'Amz-Sdk-Invocation-Id,Amz-Sdk-Request,Authorization,Content-Length,content-type,Date,Host,x-amz-content-sha256,x-amz-date,X-Amz-Security-Token,X-Amz-Target,X-Amz-User-Agent,X-Amzn-Trace-Id,x-saturn-app-id,x-saturn-signature-rsa-sha256'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'POST'"
+                            },
+                            "statusCode": "200"
+                        }
+                    },
+                    "type": "mock"
+                }
+            },
+            "post": {
+                "description": "Submit the refund amount for a given return transaction\n    based on the order and items selected for return",
+                "operationId": "createRefund",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createRefundRequestContent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "x-saturn-app-id",
+                        "in": "header",
+                        "description": "Unique Identifier for the 3p App",
+                        "schema": {
+                            "type": "string",
+                            "description": "Unique Identifier for the 3p App"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "x-saturn-signature-rsa-sha256",
+                        "in": "header",
+                        "description": "Header placeholder for populating RSA signature.",
+                        "schema": {
+                            "type": "string",
+                            "description": "Header placeholder for populating RSA signature."
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "createRefund 200 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createRefundResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "InvalidInputException 400 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidInputExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ResourceNotFoundException 404 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResourceNotFoundExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "InternalServerException 500 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/refund/preview": {
+            "options": {
+                "description": "Handles CORS-preflight requests",
+                "operationId": "CorsRefundPreview",
+                "responses": {
+                    "200": {
+                        "description": "Canned response for CORS-preflight requests",
+                        "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Max-Age": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "tags": [
+                    "CORS"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "contentHandling": "CONVERT_TO_TEXT",
+                    "passThroughBehavior": "when_no_match",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\":200}"
+                    },
+                    "responses": {
+                        "default": {
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Max-Age": "'600'",
+                                "method.response.header.Access-Control-Allow-Headers": "'Amz-Sdk-Invocation-Id,Amz-Sdk-Request,Authorization,Content-Length,content-type,Date,Host,x-amz-content-sha256,x-amz-date,X-Amz-Security-Token,X-Amz-Target,X-Amz-User-Agent,X-Amzn-Trace-Id,x-saturn-app-id,x-saturn-signature-rsa-sha256'",
+                                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'POST'"
+                            },
+                            "statusCode": "200"
+                        }
+                    },
+                    "type": "mock"
+                }
+            },
+            "post": {
+                "description": "Calculate the maximum refund amount and shipping charges for a given return transaction\n    based on the order and items selected for return",
+                "operationId": "previewRefund",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/previewRefundRequestContent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "x-saturn-app-id",
+                        "in": "header",
+                        "description": "Unique Identifier for the 3p App",
+                        "schema": {
+                            "type": "string",
+                            "description": "Unique Identifier for the 3p App"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "x-saturn-signature-rsa-sha256",
+                        "in": "header",
+                        "description": "Header placeholder for populating RSA signature.",
+                        "schema": {
+                            "type": "string",
+                            "description": "Header placeholder for populating RSA signature."
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "previewRefund 200 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/previewRefundResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "InvalidInputException 400 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidInputExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ResourceNotFoundException 404 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResourceNotFoundExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "InternalServerException 500 response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Access-Control-Expose-Headers": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Currency": {
+                "type": "string",
+                "description": "Describes the currency of amount/charge value",
+                "enum": [
+                    "INR",
+                    "EUR",
+                    "USD"
+                ]
+            },
+            "InternalServerExceptionResponseContent": {
+                "type": "object",
+                "description": "Internal Server Exception",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InvalidInputExceptionResponseContent": {
+                "type": "object",
+                "description": "Invalid Input Exception",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "NotificationPreferences": {
+                "type": "object",
+                "description": "NotificationPreferences represents an entity with refund notification preferences",
+                "properties": {
+                    "notifyShopper": {
+                        "type": "boolean",
+                        "description": "Flag to include notify refund submission",
+                        "nullable": true
+                    },
+                    "notificationMessage": {
+                        "type": "string",
+                        "description": "Message to be included in the refund notification"
+                    }
+                },
+                "required": [
+                    "notificationMessage",
+                    "notifyShopper"
+                ]
+            },
+            "OrderLineItem": {
+                "type": "object",
+                "description": "OrderLineItem represents an entity with item specific details",
+                "properties": {
+                    "orderItemId": {
+                        "type": "string",
+                        "description": "Unique identifier for the order line item"
+                    },
+                    "itemProductId": {
+                        "type": "string",
+                        "description": "Unique identifier of the product for the order line item"
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "description": "Describes unit quantity of given order line item"
+                    }
+                },
+                "required": [
+                    "itemProductId",
+                    "orderItemId",
+                    "quantity"
+                ]
+            },
+            "RefundLineItem": {
+                "type": "object",
+                "description": "RefundLineItem represents an entity with item specific refund charges applied and other refund details",
+                "properties": {
+                    "refundItemId": {
+                        "type": "string",
+                        "description": "Unique identifier of the refund line item"
+                    },
+                    "itemProductId": {
+                        "type": "string",
+                        "description": "Unique identifier of the product for the refund line item"
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "description": "Describes unit quantity of the refund line item"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "Refund price of the refund line item"
+                    },
+                    "shipping": {
+                        "type": "number",
+                        "description": "Refund Shipping price of the order line item"
+                    },
+                    "tax": {
+                        "type": "number",
+                        "description": "Refund tax of the refund line item"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "description": "Discount value on the refund line item"
+                    }
+                },
+                "required": [
+                    "itemProductId",
+                    "price",
+                    "quantity",
+                    "refundItemId"
+                ]
+            },
+            "RefundPreferences": {
+                "type": "object",
+                "description": "RefundPreferences represents an entity with refund submission preferences",
+                "properties": {
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    },
+                    "submittedTotalRefund": {
+                        "type": "number",
+                        "description": "Preferred amount to refund for the given return"
+                    },
+                    "includeShipping": {
+                        "type": "boolean",
+                        "description": "Flag to include shipping charges",
+                        "nullable": true
+                    },
+                    "notificationPreferences": {
+                        "$ref": "#/components/schemas/NotificationPreferences"
+                    }
+                },
+                "required": [
+                    "currency",
+                    "notificationPreferences",
+                    "submittedTotalRefund"
+                ]
+            },
+            "ResourceNotFoundExceptionResponseContent": {
+                "type": "object",
+                "description": "Resource Not Found Exception",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ThrottlingExceptionResponseContent": {
+                "type": "object",
+                "description": "Throttling Exception",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "createRefundRequestContent": {
+                "type": "object",
+                "description": "This contains input required to submit the refund",
+                "properties": {
+                    "storeId": {
+                        "type": "string",
+                        "description": "Unique store Identifier"
+                    },
+                    "orderId": {
+                        "type": "string",
+                        "description": "Unique Order Identifier within a store"
+                    },
+                    "orderLineItems": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLineItem"
+                        },
+                        "description": "List of Order line items"
+                    },
+                    "refundPreferences": {
+                        "$ref": "#/components/schemas/RefundPreferences"
+                    }
+                },
+                "required": [
+                    "orderId",
+                    "orderLineItems",
+                    "refundPreferences",
+                    "storeId"
+                ]
+            },
+            "createRefundResponseContent": {
+                "type": "object",
+                "description": "This is the output for submit refund & contains the total refund charge breakup",
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "description": "Unique Order Identifier within a store"
+                    },
+                    "storeId": {
+                        "type": "string",
+                        "description": "Unique store Identifier"
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    },
+                    "totalRefund": {
+                        "type": "number",
+                        "description": "Total refund amount submitted"
+                    },
+                    "totalShipping": {
+                        "type": "number",
+                        "description": "Total shipping costs"
+                    },
+                    "totalTax": {
+                        "type": "number",
+                        "description": "Total tax of the refunded items"
+                    },
+                    "totalDiscount": {
+                        "type": "number",
+                        "description": "Total discounts of the refunded items"
+                    },
+                    "totalPrice": {
+                        "type": "number",
+                        "description": "Total price of the refunded items"
+                    },
+                    "refundLineItems": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RefundLineItem"
+                        },
+                        "description": "List of Refunded line items"
+                    }
+                },
+                "required": [
+                    "currency",
+                    "orderId",
+                    "refundLineItems",
+                    "storeId",
+                    "totalPrice",
+                    "totalRefund"
+                ]
+            },
+            "previewRefundRequestContent": {
+                "type": "object",
+                "description": "This contains input required to calculate the refund",
+                "properties": {
+                    "storeId": {
+                        "type": "string",
+                        "description": "Unique store Identifier"
+                    },
+                    "orderId": {
+                        "type": "string",
+                        "description": "Unique Order Identifier within a store"
+                    },
+                    "orderLineItems": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLineItem"
+                        },
+                        "description": "List of Order line items"
+                    }
+                },
+                "required": [
+                    "orderId",
+                    "orderLineItems",
+                    "storeId"
+                ]
+            },
+            "previewRefundResponseContent": {
+                "type": "object",
+                "description": "This is the output for calculate refund & contains the refund charge breakup for the returned items",
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "description": "Unique Order Identifier within a store"
+                    },
+                    "storeId": {
+                        "type": "string",
+                        "description": "Unique store Identifier"
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    },
+                    "totalRefund": {
+                        "type": "number",
+                        "description": "Total refund amount available"
+                    },
+                    "totalShipping": {
+                        "type": "number",
+                        "description": "Total shipping costs"
+                    },
+                    "totalTax": {
+                        "type": "number",
+                        "description": "Total tax of the refunded items"
+                    },
+                    "totalDiscount": {
+                        "type": "number",
+                        "description": "Total discounts of the refunded items"
+                    },
+                    "totalPrice": {
+                        "type": "number",
+                        "description": "Total price of the refunded items"
+                    },
+                    "refundLineItems": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RefundLineItem"
+                        },
+                        "description": "List of Refunded line items"
+                    }
+                },
+                "required": [
+                    "currency",
+                    "orderId",
+                    "refundLineItems",
+                    "storeId",
+                    "totalPrice",
+                    "totalRefund"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "aws.auth.sigv4": {
+                "type": "apiKey",
+                "description": "AWS Signature Version 4 authentication",
+                "name": "Authorization",
+                "in": "header",
+                "x-amazon-apigateway-authtype": "awsSigv4"
+            }
+        }
+    },
+    "security": [
+        {
+            "aws.auth.sigv4": []
+        }
+    ],
+    "x-amazon-apigateway-gateway-responses": {
+        "DEFAULT_4XX": {
+            "responseTemplates": {
+                "application/json": "{\"message\":$context.error.messageString}"
+            },
+            "responseParameters": {
+                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+            }
+        },
+        "DEFAULT_5XX": {
+            "responseTemplates": {
+                "application/json": "{\"message\":$context.error.messageString}"
+            },
+            "responseParameters": {
+                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+            }
+        }
+    }
+}
